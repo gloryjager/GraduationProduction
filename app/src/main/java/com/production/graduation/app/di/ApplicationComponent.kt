@@ -5,6 +5,8 @@
 package net.kentaku.app.di
 
 import com.production.graduation.App
+import com.production.graduation.main.di.MainActivityComponent
+import com.production.graduation.main.di.MainActivityModule
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import net.kentaku.core.di.ApplicationScope
@@ -15,15 +17,17 @@ import net.kentaku.core.di.ApplicationScope
  */
 @ApplicationScope
 @Component(modules = arrayOf(
-        AndroidInjectionModule::class,
         ApplicationModule::class
 ))
 interface ApplicationComponent {
     fun inject(application: App)
+    fun newMainActivityComponent(mainActivityModule: MainActivityModule): MainActivityComponent
 
 //    ,
 //    ActivityResultStoreModule::class
 
+
+//    AndroidInjectionModule::class,
 
 //    AndroidInjectionModule::class,
 //    ApplicationModule::class,
@@ -38,10 +42,6 @@ interface ApplicationComponent {
 //    DatabaseModule::class,
 //    BannerRepositoryModule::class
 
-//    fun newMainActivityComponent(
-//            mainActivityModule: MainActivityModule,
-//            googleApiClientModule: GoogleApiClientModule
-//    ): MainActivityComponent
 
 //    fun newModalActivityComponent(
 //            modalActivityModule: ModalActivityModule

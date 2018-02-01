@@ -1,0 +1,313 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION
+    buildToolsVersion BUILD_TOOLD_VERSION
+
+    signingConfigs {
+        preview {
+            storeFile file("preview.jks")
+            storePassword "preview"
+            keyAlias "preview"
+            keyPassword "preview"
+        }
+
+        production {
+            storeFile file("eheya.keystore")
+            storePassword productionStorePassword
+            keyAlias productionKeyAlias
+            keyPassword productionKeyPassword
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [
+                mapApiKey: "AIzaSyD9F2bdo51OPq8A9HnrWGKyp1B0OwiWm2o"
+        ]
+        buildConfigField "String", "API_BASE_URL", "null"
+        buildConfigField "String", "API_PATH", "null"
+        buildConfigField "String", "PROXY_API_BASE_URL", 'null'
+        buildConfigField "String", "TLS_BANNER_API_BASE_URL", '"https://proxy.kentaku-d.com/"'
+        buildConfigField "String", "BANNER_API_BASE_URL", '"http://153.120.92.84/callAPI"'
+        buildConfigField "boolean", "ENABLE_LOG", "true"
+        buildConfigField "boolean", "IS_KENTAKU", "false"
+        buildConfigField "boolean", "IS_PORTAL", "false"
+        buildConfigField "int", "DEFAULT_RANGE", "3"
+        buildConfigField "float", "MIN_ZOOM_LEVEL", "13.0f"
+        buildConfigField "float", "MAX_ZOOM_LEVEL", "21.0f"
+        buildConfigField "float", "DEFAULT_ZOOM_LEVEL", "14.0f"
+        buildConfigField "int", "DEFAULT_MAX_COUNT", "100"
+        buildConfigField "int", "DISTANCE_PER_ONE_MINUTE_WALK", "80"
+        buildConfigField "long", "DEFAULT_CONNECTION_TIMEOUT", "20"
+        buildConfigField "long", "DEFAULT_READ_TIMEOUT", "20"
+        buildConfigField "long", "DEFAULT_WRITE_TIMEOUT", "20"
+        buildConfigField "long", "LONG_CONNECTION_TIMEOUT", "60"
+        buildConfigField "long", "LONG_READ_TIMEOUT", "60"
+        buildConfigField "long", "LONG_WRITE_TIMEOUT", "60"
+        buildConfigField "int", "INITIAL_SHOWN_ROOMS", "3"
+        buildConfigField "int", "MAX_INQUIRY_ROOMS", "10"
+        buildConfigField "String", "PERSONAL_INFO_LINK", 'null'
+
+        // Event
+        buildConfigField "String", "SEND_PROPERTIES_INQUIRY_MAIL_EVENT_NAME", '"inquiry_col_prop"'
+        buildConfigField "String", "SEND_PROPERTY_INQUIRY_MAIL_EVENT_NAME", '"inquiry_mail_prop"'
+        buildConfigField "String", "CALL_PROPERTY_INQUIRY_EVENT_NAME", '"inquiry_tel_prop"'
+        buildConfigField "String", "SEND_TRADER_INQUIRY_MAIL_EVENT_NAME", '"inquiry_mail_shop"'
+        buildConfigField "String", "CALL_TRADER_INQUIRY_EVENT_NAME", '"inquiry_tel_shop"'
+
+        // FOX
+        buildConfigField "boolean", "FOX_ENABLED", "false"
+        buildConfigField "int", "FOX_APP_ID", '-1'
+        buildConfigField "String", "FOX_APP_KEY", '""'
+        buildConfigField "String", "FOX_APP_SALT", '""'
+
+        buildConfigField "String", "FOX_SEND_PROPERTIES_INQUIRY_MAIL_EVENT_NAME", '""'
+        buildConfigField "int", "FOX_SEND_PROPERTIES_INQUIRY_MAIL_POINT_ID", "0"
+
+        buildConfigField "String", "FOX_SEND_PROPERTY_INQUIRY_MAIL_EVENT_NAME", '""'
+        buildConfigField "int", "FOX_SEND_PROPERTY_INQUIRY_MAIL_POINT_ID", "0"
+
+        buildConfigField "String", "FOX_CALL_PROPERTY_INQUIRY_EVENT_NAME", '""'
+        buildConfigField "int", "FOX_CALL_PROPERTY_INQUIRY_POINT_ID", "0"
+
+        buildConfigField "String", "FOX_SEND_TRADER_INQUIRY_MAIL_EVENT_NAME", '""'
+        buildConfigField "int", "FOX_SEND_TRADER_INQUIRY_MAIL_POINT_ID", "0"
+
+        buildConfigField "String", "FOX_CALL_TRADER_INQUIRY_EVENT_NAME", '""'
+        buildConfigField "int", "FOX_CALL_TRADER_INQUIRY_POINT_ID", "0"
+
+        signingConfig signingConfigs.preview
+    }
+
+    buildTypes {
+        debug {
+            multiDexEnabled true
+            signingConfig signingConfigs.preview
+        }
+        release {
+            multiDexEnabled true
+//            minifyEnabled true
+//            shrinkResources true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "service", "distribution"
+
+    productFlavors {
+        kentaku {
+            dimension "service"
+            applicationId "net.kentaku.eheya_kentaku"
+            buildConfigField "boolean", "IS_KENTAKU", "true"
+            buildConfigField "String", "API_BASE_URL", '"https://e-heya.kentaku.net"'
+            buildConfigField "String", "API_PATH", '"/kentakuapi/callApp.jsp"'
+            buildConfigField "String", "PROXY_API_BASE_URL", '"https://api.kentaku-d.com/v1/kentaku/"'
+            buildConfigField "String", "BANNER_API_VERSION", '"master"'
+            buildConfigField "String", "PERSONAL_INFO_LINK", '"https://e-heya.kentaku.net/"'
+            resValue "string", "traderSearchUrl", 'http://sp-e-heya.kentaku.net/sp/s/shop/area/shop_list.html?tdhkId=%1$s'
+
+            // FOX
+            buildConfigField "boolean", "FOX_ENABLED", "true"
+            buildConfigField "int", "FOX_APP_ID", '6427'
+            buildConfigField "String", "FOX_APP_KEY", '"89330a8590cb872176ceb998442f2dc76b886caf"'
+            buildConfigField "String", "FOX_APP_SALT", '"e2f2e8978347c4306e1af4b2e84a5fde5d02c5b2"'
+
+            buildConfigField "String", "FOX_SEND_PROPERTIES_INQUIRY_MAIL_EVENT_NAME", '"1"'
+            buildConfigField "int", "FOX_SEND_PROPERTIES_INQUIRY_MAIL_POINT_ID", "10800"
+
+            buildConfigField "String", "FOX_SEND_PROPERTY_INQUIRY_MAIL_EVENT_NAME", '"2"'
+            buildConfigField "int", "FOX_SEND_PROPERTY_INQUIRY_MAIL_POINT_ID", "10797"
+
+            buildConfigField "String", "FOX_CALL_PROPERTY_INQUIRY_EVENT_NAME", '"3"'
+            buildConfigField "int", "FOX_CALL_PROPERTY_INQUIRY_POINT_ID", "10799"
+
+            buildConfigField "String", "FOX_SEND_TRADER_INQUIRY_MAIL_EVENT_NAME", '"4"'
+            buildConfigField "int", "FOX_SEND_TRADER_INQUIRY_MAIL_POINT_ID", "10798"
+
+            buildConfigField "String", "FOX_CALL_TRADER_INQUIRY_EVENT_NAME", '"5"'
+            buildConfigField "int", "FOX_CALL_TRADER_INQUIRY_POINT_ID", "10801"
+
+            manifestPlaceholders = [
+                    schema: "daitokentaku",
+                    host  : "e-heya.kentaku.net"
+            ]
+        }
+
+        portal {
+            dimension "service"
+            applicationId "net.kentaku.eheya"
+            buildConfigField "boolean", "IS_PORTAL", "true"
+            buildConfigField "String", "API_BASE_URL", '"https://www.eheya.net"'
+            buildConfigField "String", "API_PATH", '"/portalapi/callApp.jsp"'
+            buildConfigField "String", "PROXY_API_BASE_URL", '"https://api.kentaku-d.com/v1/portal/"'
+            buildConfigField "String", "BANNER_API_VERSION", '"portal"'
+            buildConfigField "String", "PERSONAL_INFO_LINK", '"https://www.eheya.net/"'
+            resValue "string", "traderSearchUrl", 'http://sp.eheya.net/m/s/shop/index.html?prefId=%1$s'
+
+            // FOX
+            buildConfigField "boolean", "FOX_ENABLED", "true"
+            buildConfigField "int", "FOX_APP_ID", '6425'
+            buildConfigField "String", "FOX_APP_KEY", '"7b0bc174c35fb0e8690ee761f400f7cf1427fb1c"'
+            buildConfigField "String", "FOX_APP_SALT", '"d7c3cc5e7cb690feed1024290d57f5952037ecfd"'
+
+            buildConfigField "String", "FOX_SEND_PROPERTIES_INQUIRY_MAIL_EVENT_NAME", '"1"'
+            buildConfigField "int", "FOX_SEND_PROPERTIES_INQUIRY_MAIL_POINT_ID", "10789"
+
+            buildConfigField "String", "FOX_SEND_PROPERTY_INQUIRY_MAIL_EVENT_NAME", '"2"'
+            buildConfigField "int", "FOX_SEND_PROPERTY_INQUIRY_MAIL_POINT_ID", "10788"
+
+            buildConfigField "String", "FOX_CALL_PROPERTY_INQUIRY_EVENT_NAME", '"3"'
+            buildConfigField "int", "FOX_CALL_PROPERTY_INQUIRY_POINT_ID", "10790"
+
+            buildConfigField "String", "FOX_SEND_TRADER_INQUIRY_MAIL_EVENT_NAME", '"4"'
+            buildConfigField "int", "FOX_SEND_TRADER_INQUIRY_MAIL_POINT_ID", "10791"
+
+            buildConfigField "String", "FOX_CALL_TRADER_INQUIRY_EVENT_NAME", '"5"'
+            buildConfigField "int", "FOX_CALL_TRADER_INQUIRY_POINT_ID", "10787"
+
+            manifestPlaceholders = [
+                    schema: "eeheyanet",
+                    host  : "e-heya-portal.kentaku.net"
+            ]
+        }
+
+        preview {
+            dimension "distribution"
+
+            applicationIdSuffix = ".preview"
+
+            versionCode 1
+            versionName "Preview 79"
+
+            signingConfig signingConfigs.preview
+
+            // 評価奨励が表示される間�ms単�
+            buildConfigField "long", "REVIEW_DIALOG_SHOW_INTERVAL", "86400000"
+        }
+
+        production {
+            dimension "distribution"
+
+            versionCode 500
+            versionName "5.0.0"
+
+            ext.enableCrashlytics = false
+            buildConfigField "boolean", "ENABLE_LOG", "false"
+
+            signingConfig signingConfigs.production
+
+            // 評価奨励が表示される間�ms単�
+            buildConfigField "long", "REVIEW_DIALOG_SHOW_INTERVAL", "86400000"
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+ext {
+    googlePlayServicesVersion = "11.6.2"
+    dagger2Version = "2.12"
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation project(':domain')
+    implementation project(':api')
+    implementation project(':widget')
+
+    kapt "com.android.databinding:compiler:3.0.1"
+
+    implementation 'com.android.support:multidex:1.0.2'
+    implementation 'com.android.support:appcompat-v7:' + supportLibraryVersion
+    implementation 'com.android.support:recyclerview-v7:' + supportLibraryVersion
+    implementation 'com.android.support:cardview-v7:' + supportLibraryVersion
+    implementation 'com.android.support:design:' + supportLibraryVersion
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    implementation 'com.google.android.gms:play-services-maps:' + googlePlayServicesVersion
+    implementation 'com.google.android.gms:play-services-location:' + googlePlayServicesVersion
+    implementation 'com.google.android.gms:play-services-places:' + googlePlayServicesVersion
+    implementation 'com.google.android.gms:play-services-ads:' + googlePlayServicesVersion
+    implementation 'com.google.firebase:firebase-core:' + googlePlayServicesVersion
+    implementation 'com.google.firebase:firebase-messaging:' + googlePlayServicesVersion
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+
+    implementation "io.reactivex.rxjava2:rxjava:" + rxJavaVersion
+    implementation 'io.reactivex.rxjava2:rxkotlin:' + rxKotlinVersion
+    implementation "io.reactivex.rxjava2:rxandroid:" + rxAndroidVersion
+
+    implementation 'com.google.dagger:dagger:' + dagger2Version
+    kapt 'com.google.dagger:dagger-compiler:' + dagger2Version
+
+    implementation('com.google.dagger:dagger-android:' + dagger2Version) {
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
+    implementation('com.google.dagger:dagger-android-support:' + dagger2Version) {
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
+    kapt 'com.google.dagger:dagger-android-processor:' + dagger2Version
+
+    implementation 'com.squareup.retrofit2:retrofit:' + retrofitVersion
+    implementation 'com.squareup.retrofit2:converter-moshi:' + retrofitVersion
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:' + retrofitVersion
+
+    implementation 'com.squareup.okhttp3:okhttp:' + okHttpVersion
+    implementation 'com.squareup.okhttp3:logging-interceptor:' + okHttpVersion
+
+    implementation 'com.github.bumptech.glide:glide:' + glideVersion
+    implementation 'com.github.bumptech.glide:okhttp3-integration:' + glideVersion
+    kapt 'com.github.bumptech.glide:compiler:' + glideVersion
+
+    implementation 'com.jakewharton.timber:timber:4.5.1'
+//    compile 'com.github.takusemba:multisnaprecyclerview:1.1.0'
+    implementation 'com.github.magiepooh:recycler-itemdecoration:1.1.1@aar'
+
+    implementation 'co.cyberz.fox:track-core:4.4.1'
+
+//    implementation 'org.parceler:parceler-api:1.1.9'
+//    kapt 'org.parceler:parceler:1.1.9'
+
+//    implementation 'com.github.gfx.android.orma:orma:' + ormaVersion
+//    kapt 'com.github.gfx.android.orma:orma-processor:' + ormaVersion
+
+    implementation 'com.squareup.sqlbrite3:sqlbrite:' + sqlBriteVersion
+    implementation 'com.squareup.sqlbrite3:sqlbrite-kotlin:' + sqlBriteVersion
+
+    implementation 'android.arch.persistence:db:' + roomDbVersion
+    implementation 'android.arch.persistence:db-framework:' + roomDbVersion
+//    implementation "android.arch.persistence.room:runtime:" + roomDbVersion
+//    implementation "android.arch.persistence.room:rxjava2:" + roomDbVersion
+//    kapt "android.arch.persistence.room:compiler:" + roomDbVersion
+
+    implementation 'nz.bradcampbell:paperparcel:' + paperParcelVersion
+    implementation 'nz.bradcampbell:paperparcel-kotlin:' + paperParcelVersion
+    kapt 'nz.bradcampbell:paperparcel-compiler:' + paperParcelVersion
+
+    previewImplementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true;
+    }
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+}
+
+repositories {
+    maven {
+        url "https://github.com/cyber-z/public-fox-android-sdk/raw/master/mavenRepo"
+    }
+}
+//apply plugin: 'com.google.gms.google-services'
+

@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) Daito Trust Construction Co., Ltd. All Rights Reserved.
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION
+    buildToolsVersion BUILD_TOOLD_VERSION
+
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(":domain")
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation 'com.squareup.retrofit2:retrofit:' + retrofitVersion
+
+    implementation "com.squareup.moshi:moshi:" + moshiVersion
+    implementation 'se.ansman.kotshi:api:' + kotshiVersion
+    kapt 'se.ansman.kotshi:compiler:' + kotshiVersion
+
+    implementation "io.reactivex.rxjava2:rxjava:" + rxJavaVersion
+    implementation 'io.reactivex.rxjava2:rxkotlin:' + rxKotlinVersion
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.squareup.retrofit2:converter-moshi:' + retrofitVersion
+    testImplementation 'com.squareup.retrofit2:adapter-rxjava2:' + retrofitVersion
+    testImplementation 'com.squareup.okhttp3:okhttp:' + okHttpVersion
+    testImplementation 'com.squareup.okhttp3:logging-interceptor:' + okHttpVersion
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

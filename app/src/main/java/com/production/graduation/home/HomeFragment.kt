@@ -16,12 +16,12 @@ import com.production.graduation.main.MainActivity
  * Created by student on 2018/02/01.
  */
 
-class HomeFragment() : BaseFragment<HomeViewModel>(){
+class HomeFragment() : BaseFragment<HomeViewModel>() {
     private lateinit var component: HomeComponent
     private lateinit var binding: FragmentHomeBinding
 
     companion object {
-        fun newInstance() : HomeFragment{
+        fun newInstance(): HomeFragment {
             return HomeFragment().apply {
                 arguments = Bundle()
             }
@@ -42,7 +42,7 @@ class HomeFragment() : BaseFragment<HomeViewModel>(){
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-
+        binding.viewmodel = viewModel
         return binding.root
     }
 }
